@@ -53,7 +53,8 @@ paths:
             application/json:
               schema:
                 type: array
-                $ref: "#/components/schemas/PreviewRecipe"
+                items:
+                  $ref: "#/components/schemas/PreviewRecipe"
         "404":
           description: No recipes found
   /recipe/search:
@@ -78,8 +79,8 @@ paths:
           schema:
             type: integer
             format: int64
-            min: 5
-            max: 15
+            minimum: 5
+            maximum: 15
             default: 5
             example: 5
         - name: cuisine
@@ -110,7 +111,8 @@ paths:
             application/json:
               schema:
                 type: array
-                $ref: "#/components/schemas/PreviewRecipe"
+                items:
+                  $ref: "#/components/schemas/PreviewRecipe"
         "404":
           description: No recipes found
   /recipe/familyRecipes:
@@ -127,7 +129,8 @@ paths:
             application/json:
               schema:
                 type: array
-                $ref: "#/components/schemas/FamilyRecipe"
+                items:
+                  $ref: "#/components/schemas/FamilyRecipe"
         "404":
           description: No recipes found
   /user:
@@ -226,7 +229,8 @@ paths:
             application/json:
               schema:
                 type: array
-                $ref: "#/components/schemas/PreviewRecipe"
+                items:
+                  $ref: "#/components/schemas/PreviewRecipe"
         "404":
           description: No recipes found
   /user/watched:
@@ -266,7 +270,8 @@ paths:
             application/json:
               schema:
                 type: array
-                $ref: "#/components/schemas/PreviewRecipe"
+                items:
+                  $ref: "#/components/schemas/PreviewRecipe"
         "404":
           description: No recipes found
   /user/cretaedRecipe:
@@ -306,7 +311,8 @@ paths:
             application/json:
               schema:
                 type: array
-                $ref: "#/components/schemas/PreviewRecipe"
+                items:
+                  $ref: "#/components/schemas/PreviewRecipe"
         "404":
           description: No recipes found
 components:
@@ -435,7 +441,7 @@ components:
             type: string
             description: The recipe intolerances
             example: "Gluten"
-    previewRecipe:
+    PreviewRecipe:
       type: object
       description: Model containing recipe information
       properties:
