@@ -13,4 +13,5 @@ Itamar Bliman - ID 312235765
 ## Development
 
 The estimated developing time for server side is: 40 development hours.
+
 The estimated developing time for client side is: 35 development hours.
