@@ -310,216 +310,217 @@ paths:
         "404":
           description: No recipes found
 components:
-  User:
-    type: object
-    description: Model containing user information
-    properties:
-      username:
-        type: string
-        minLength: 3
-        maxLength: 8
-        description: The user name contains between 3 and 8 letters only
-        example: "username"
-      first Name:
-        type: string
-        description: The user's first name
-        example: "firstName"
-      last Name:
-        type: string
-        description: The user's last name
-        example: "lastName"
-      country:
-        type: string
-        description: The user's country
-        example: "Israel"
-      password:
-        type: string
-        minLength: 5
-        maxLength: 10
-        format: password
-        description: The user's password contains between 5 and 10 characters, at least one number, and one special character.
-        example: "p@55word"
-      email:
-        type: string
-        format: email
-        description: The user's email
-        example: "samirada@gmail.com"
-  Login:
-    type: object
-    description: Model containing user login information
-    properties:
-      username:
-        type: string
-        minLength: 3
-        maxLength: 8
-        description: The user name contains between 3 and 8 letters only
-        example: "username"
-      password:
-        type: string
-        minLength: 5
-        maxLength: 10
-        format: password
-        description: The user's password contains between 5 and 10 characters, at least one number, and one special character.
-        example: "p@55word"
-  Recipe:
-    type: object
-    description: Model containing recipe information
-    properties:
-      name:
-        type: string
-        description: The recipe name
-        example: "Recipe name"
-      imageURL:
-        type: string
-        description: The url for recipe image
-        format: url
-        example: "https://www.acouplecooks.com/wp-content/uploads/2021/03/Cheese-Tortellini-011.jpg"
-      preparationTimeInMinutes:
-        type: number
-        description: The recipe preparation time in minutes
-        example: 60
-      numOfLikes:
-        type: number
-        description: The recipe number of likes
-        example: 10
-      vegan:
-        type: boolean
-        description: The recipe is vegan
-        example: true
-      vegetarian:
-        type: boolean
-        description: The recipe is vegetarian
-        example: true
-      glutenFree:
-        type: boolean
-        description: The recipe is gluten free
-        example: true
-      watched:
-        type: boolean
-        description: The recipe watched status
-        example: "recipe watched status"
-      favorite:
-        type: boolean
-        description: The recipe favorite status
-        example: "recipe favorite status"
-      ingredients:
-        type: array
-        description: The recipe ingredients and quantities
-        items:
+  schemas:
+    User:
+      type: object
+      description: Model containing user information
+      properties:
+        username:
           type: string
-          description: The recipe ingredient and quantity
-          example: "eggs 3"
-      instructions:
-        type: string
-        description: The recipe instructions
-        example: "Step 1: do this, Step 2: do that"
-      cuisine:
-        type: array
-        description: The recipe cuisine
-        items:
+          minLength: 3
+          maxLength: 8
+          description: The user name contains between 3 and 8 letters only
+          example: "username"
+        first Name:
           type: string
+          description: The user's first name
+          example: "firstName"
+        last Name:
+          type: string
+          description: The user's last name
+          example: "lastName"
+        country:
+          type: string
+          description: The user's country
+          example: "Israel"
+        password:
+          type: string
+          minLength: 5
+          maxLength: 10
+          format: password
+          description: The user's password contains between 5 and 10 characters, at least one number, and one special character.
+          example: "p@55word"
+        email:
+          type: string
+          format: email
+          description: The user's email
+          example: "samirada@gmail.com"
+    Login:
+      type: object
+      description: Model containing user login information
+      properties:
+        username:
+          type: string
+          minLength: 3
+          maxLength: 8
+          description: The user name contains between 3 and 8 letters only
+          example: "username"
+        password:
+          type: string
+          minLength: 5
+          maxLength: 10
+          format: password
+          description: The user's password contains between 5 and 10 characters, at least one number, and one special character.
+          example: "p@55word"
+    Recipe:
+      type: object
+      description: Model containing recipe information
+      properties:
+        name:
+          type: string
+          description: The recipe name
+          example: "Recipe name"
+        imageURL:
+          type: string
+          description: The url for recipe image
+          format: url
+          example: "https://www.acouplecooks.com/wp-content/uploads/2021/03/Cheese-Tortellini-011.jpg"
+        preparationTimeInMinutes:
+          type: number
+          description: The recipe preparation time in minutes
+          example: 60
+        numOfLikes:
+          type: number
+          description: The recipe number of likes
+          example: 10
+        vegan:
+          type: boolean
+          description: The recipe is vegan
+          example: true
+        vegetarian:
+          type: boolean
+          description: The recipe is vegetarian
+          example: true
+        glutenFree:
+          type: boolean
+          description: The recipe is gluten free
+          example: true
+        watched:
+          type: boolean
+          description: The recipe watched status
+          example: "recipe watched status"
+        favorite:
+          type: boolean
+          description: The recipe favorite status
+          example: "recipe favorite status"
+        ingredients:
+          type: array
+          description: The recipe ingredients and quantities
+          items:
+            type: string
+            description: The recipe ingredient and quantity
+            example: "eggs 3"
+        instructions:
+          type: string
+          description: The recipe instructions
+          example: "Step 1: do this, Step 2: do that"
+        cuisine:
+          type: array
           description: The recipe cuisine
-          example: "Italian"
-      diet:
-        type: array
-        description: The recipe diet
-        items:
-          type: string
+          items:
+            type: string
+            description: The recipe cuisine
+            example: "Italian"
+        diet:
+          type: array
           description: The recipe diet
-          example: "Vegetarian"
-      intolerances:
-        type: array
-        description: The recipe intolerances
-        items:
-          type: string
+          items:
+            type: string
+            description: The recipe diet
+            example: "Vegetarian"
+        intolerances:
+          type: array
           description: The recipe intolerances
-          example: "Gluten"
-  previewRecipe:
-    type: object
-    description: Model containing recipe information
-    properties:
-      name:
-        type: string
-        description: The recipe name
-        example: "Recipe name"
-      imageURL:
-        type: string
-        description: The url for recipe image
-        format: url
-        example: "https://www.acouplecooks.com/wp-content/uploads/2021/03/Cheese-Tortellini-011.jpg"
-      preparationTimeInMinutes:
-        type: number
-        description: The recipe preparation time in minutes
-        example: 60
-      numOfLikes:
-        type: number
-        description: The recipe number of likes
-        example: 10
-      vegan:
-        type: boolean
-        description: The recipe is vegan
-        example: true
-      vegetarian:
-        type: boolean
-        description: The recipe is vegetarian
-        example: true
-      glutenFree:
-        type: boolean
-        description: The recipe is gluten free
-        example: true
-      watched:
-        type: boolean
-        description: The recipe watched status
-        example: "recipe watched status"
-      favorite:
-        type: boolean
-        description: The recipe favorite status
-        example: "recipe favorite status"
-  FamilyRecipe:
-    type: object
-    description: Model containing family recipe information
-    properties:
-      name:
-        type: string
-        description: The recipe name
-        example: "Recipe name"
-      imageURL:
-        type: string
-        description: The url for recipe image
-        format: url
-        example: "https://www.acouplecooks.com/wp-content/uploads/2021/03/Cheese-Tortellini-011.jpg"
-      preparationTimeInMinutes:
-        type: number
-        description: The recipe preparation time in minutes
-        example: 60
-      vegan:
-        type: boolean
-        description: The recipe is vegan
-        example: true
-      vegetarian:
-        type: boolean
-        description: The recipe is vegetarian
-        example: true
-      glutenFree:
-        type: boolean
-        description: The recipe is gluten free
-        example: true
-      ingredients:
-        type: array
-        description: The recipe ingredients and quantities
-        items:
+          items:
+            type: string
+            description: The recipe intolerances
+            example: "Gluten"
+    previewRecipe:
+      type: object
+      description: Model containing recipe information
+      properties:
+        name:
           type: string
-          description: The recipe ingredient and quantity
-          example: "eggs 3"
-      instructions:
-        type: string
-        description: The recipe instructions
-        example: "Step 1: do this, Step 2: do that"
-      author:
-        type: string
-        description: The recipe made by
-        example: "Samira"
-      occasion:
-        type: string
-        description: The recipe occasion
-        example: "Shabbat"
+          description: The recipe name
+          example: "Recipe name"
+        imageURL:
+          type: string
+          description: The url for recipe image
+          format: url
+          example: "https://www.acouplecooks.com/wp-content/uploads/2021/03/Cheese-Tortellini-011.jpg"
+        preparationTimeInMinutes:
+          type: number
+          description: The recipe preparation time in minutes
+          example: 60
+        numOfLikes:
+          type: number
+          description: The recipe number of likes
+          example: 10
+        vegan:
+          type: boolean
+          description: The recipe is vegan
+          example: true
+        vegetarian:
+          type: boolean
+          description: The recipe is vegetarian
+          example: true
+        glutenFree:
+          type: boolean
+          description: The recipe is gluten free
+          example: true
+        watched:
+          type: boolean
+          description: The recipe watched status
+          example: "recipe watched status"
+        favorite:
+          type: boolean
+          description: The recipe favorite status
+          example: "recipe favorite status"
+    FamilyRecipe:
+      type: object
+      description: Model containing family recipe information
+      properties:
+        name:
+          type: string
+          description: The recipe name
+          example: "Recipe name"
+        imageURL:
+          type: string
+          description: The url for recipe image
+          format: url
+          example: "https://www.acouplecooks.com/wp-content/uploads/2021/03/Cheese-Tortellini-011.jpg"
+        preparationTimeInMinutes:
+          type: number
+          description: The recipe preparation time in minutes
+          example: 60
+        vegan:
+          type: boolean
+          description: The recipe is vegan
+          example: true
+        vegetarian:
+          type: boolean
+          description: The recipe is vegetarian
+          example: true
+        glutenFree:
+          type: boolean
+          description: The recipe is gluten free
+          example: true
+        ingredients:
+          type: array
+          description: The recipe ingredients and quantities
+          items:
+            type: string
+            description: The recipe ingredient and quantity
+            example: "eggs 3"
+        instructions:
+          type: string
+          description: The recipe instructions
+          example: "Step 1: do this, Step 2: do that"
+        author:
+          type: string
+          description: The recipe made by
+          example: "Samira"
+        occasion:
+          type: string
+          description: The recipe occasion
+          example: "Shabbat"
