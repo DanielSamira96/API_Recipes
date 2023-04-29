@@ -4,7 +4,522 @@ info:
   description: API for test 3
   version: 1.0.0
 servers:
-- url: https://virtserver.swaggerhub.com/SAMIRADA_1/API_Recipes/1.0.0
-  description: SwaggerHub API Auto Mocking
-paths: {}
-components: {}
+  - url: https://virtserver.swaggerhub.com/SAMIRADA_1/API_Recipes/1.0.0
+    description: SwaggerHub API Auto Mocking
+tags:
+  - name: recipe
+    description: Everything about recipes
+  - name: user
+    description: Everything about users
+paths:
+  /recipe/{recipeId}:
+    get:
+      tags:
+        - recipe
+      summary: Get a recipe by ID
+      description: Get an object containing the recipe with the specified ID.
+      operationId: getRecipeById
+      parameters:
+        - name: recipeId
+          in: path
+          description: ID of recipe to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      responses:
+        "200":
+          description: Data of the specified recipe
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Recipe"
+        "400":
+          description: Invalid recipe ID supplied
+        "404":
+          description: Recipe not found
+  /recipe/random:
+    get:
+      tags:
+        - recipe
+      summary: Get 3 random recipes
+      description: Get array of 3 random objects containing preview recipes.
+      operationId: getRandomRecipe
+      responses:
+        "200":
+          description: Array of 3 random objects containing preview recipes
+          content:
+            application/json:
+              schema:
+                type: array
+                $ref: "#/components/schemas/PreviewRecipe"
+        "404":
+          description: No recipes found
+  /recipe/search:
+    get:
+      tags:
+        - recipe
+      summary: Search recipes by name or filters
+      description: Get array of objects containing preview recipes matching the search.
+      operationId: searchRecipe
+      parameters:
+        - name: searchTerm
+          in: query
+          description: Search term of recipe to search
+          required: false
+          schema:
+            type: string
+            example: "chicken"
+        - name: quantity
+          in: query
+          description: Number of recipes to return from the list of supported quantities
+          required: false
+          schema:
+            type: integer
+            format: int64
+            min: 5
+            max: 15
+            default: 5
+            example: 5
+        - name: cuisine
+          in: query
+          description: Cuisine of recipe to search from the list of supported cuisines
+          required: false
+          schema:
+            type: string
+            example: "italian"
+        - name: diet
+          in: query
+          description: Diet of recipe to search from the list of supported diets
+          required: false
+          schema:
+            type: string
+            example: "vegetarian"
+        - name: intolerances
+          in: query
+          description: Intolerances of recipe to search from the list of supported intolerances
+          required: false
+          schema:
+            type: string
+            example: "gluten"
+      responses:
+        "200":
+          description: Array of objects containing preview recipes with the specified name
+          content:
+            application/json:
+              schema:
+                type: array
+                $ref: "#/components/schemas/PreviewRecipe"
+        "404":
+          description: No recipes found
+  /recipe/familyRecipes:
+    get:
+      tags:
+        - recipe
+      summary: Get all family recipes
+      description: Get array of objects containing family recipes.
+      operationId: getFamilyRecipes
+      responses:
+        "200":
+          description: Array of objects containing family recipes
+          content:
+            application/json:
+              schema:
+                type: array
+                $ref: "#/components/schemas/FamilyRecipe"
+        "404":
+          description: No recipes found
+  /user:
+    post:
+      tags:
+        - user
+      summary: Create a new user
+      description: Create a new user.
+      operationId: createUser
+      requestBody:
+        description: User object that needs to be added to the data base
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        "200":
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          description: Invalid user supplied
+        "409":
+          description: User already exists
+  /user/login:
+    post:
+      tags:
+        - user
+      summary: Logs user into the system
+      description: Logs user into the system.
+      operationId: loginUser
+      requestBody:
+        description: The user name and password for login in the system
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Login"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "token"
+        "400":
+          description: Invalid username/password supplied
+  /user/logout:
+    post:
+      tags:
+        - user
+      summary: Logs out current logged in user session
+      description: Logs out current logged in user session.
+      operationId: logoutUser
+      responses:
+        "200":
+          description: successful operation
+  /user/favorites:
+    post:
+      tags:
+        - user
+      summary: Add a recipe to favorites
+      description: Add a recipe to favorites.
+      operationId: addFavoriteRecipe
+      requestBody:
+        description: Recipe object that needs to be added to the user favorites
+        content:
+          application/json:
+            schema:
+              type: integer
+              format: int64
+              example: 1
+      responses:
+        "200":
+          description: Recipe added to favorites
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Recipe"
+        "400":
+          description: Invalid recipe supplied
+        "409":
+          description: Recipe already exists in favorites
+    get:
+      tags:
+        - user
+      summary: Get all favorite recipes
+      description: Get all favorite recipes.
+      operationId: getFavoriteRecipes
+      responses:
+        "200":
+          description: Array of objects containing favorite recipes
+          content:
+            application/json:
+              schema:
+                type: array
+                $ref: "#/components/schemas/PreviewRecipe"
+        "404":
+          description: No recipes found
+  /user/watched:
+    post:
+      tags:
+        - user
+      summary: Add a recipe to user watched list
+      description: Add a recipe to user watched list.
+      operationId: addWatchedRecipe
+      requestBody:
+        description: Recipe object that needs to be added to the user watched list
+        content:
+          application/json:
+            schema:
+              type: integer
+              format: int64
+              example: 1
+      responses:
+        "200":
+          description: Recipe added to user watched list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Recipe"
+        "400":
+          description: Invalid recipe supplied
+    get:
+      tags:
+        - user
+      summary: Get all user watched recipes
+      description: Get all user watched recipes.
+      operationId: getWatchedRecipes
+      responses:
+        "200":
+          description: Array of objects containing watched recipes
+          content:
+            application/json:
+              schema:
+                type: array
+                $ref: "#/components/schemas/PreviewRecipe"
+        "404":
+          description: No recipes found
+  /user/cretaedRecipe:
+    post:
+      tags:
+        - user
+      summary: Create a new recipe
+      description: Create a new recipe by user.
+      operationId: createRecipe
+      requestBody:
+        description: Recipe object that needs to be added to the data base
+        content:
+          application/json:
+            schema:
+              type: integer
+              format: int64
+              example: 1
+      responses:
+        "200":
+          description: Recipe created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Recipe"
+        "400":
+          description: Invalid recipe supplied
+    get:
+      tags:
+        - user
+      summary: Get all created recipes by user
+      description: Get all created recipes by user.
+      operationId: getCreatedRecipes
+      responses:
+        "200":
+          description: Array of objects containing created recipes
+          content:
+            application/json:
+              schema:
+                type: array
+                $ref: "#/components/schemas/PreviewRecipe"
+        "404":
+          description: No recipes found
+components:
+  User:
+    type: object
+    description: Model containing user information
+    properties:
+      username:
+        type: string
+        minLength: 3
+        maxLength: 8
+        description: The user name contains between 3 and 8 letters only
+        example: "username"
+      first Name:
+        type: string
+        description: The user's first name
+        example: "firstName"
+      last Name:
+        type: string
+        description: The user's last name
+        example: "lastName"
+      country:
+        type: string
+        description: The user's country
+        example: "Israel"
+      password:
+        type: string
+        minLength: 5
+        maxLength: 10
+        format: password
+        description: The user's password contains between 5 and 10 characters, at least one number, and one special character.
+        example: "p@55word"
+      email:
+        type: string
+        format: email
+        description: The user's email
+        example: "samirada@gmail.com"
+  Login:
+    type: object
+    description: Model containing user login information
+    properties:
+      username:
+        type: string
+        minLength: 3
+        maxLength: 8
+        description: The user name contains between 3 and 8 letters only
+        example: "username"
+      password:
+        type: string
+        minLength: 5
+        maxLength: 10
+        format: password
+        description: The user's password contains between 5 and 10 characters, at least one number, and one special character.
+        example: "p@55word"
+  Recipe:
+    type: object
+    description: Model containing recipe information
+    properties:
+      name:
+        type: string
+        description: The recipe name
+        example: "Recipe name"
+      imageURL:
+        type: string
+        description: The url for recipe image
+        format: url
+        example: "https://www.acouplecooks.com/wp-content/uploads/2021/03/Cheese-Tortellini-011.jpg"
+      preparationTimeInMinutes:
+        type: number
+        description: The recipe preparation time in minutes
+        example: 60
+      numOfLikes:
+        type: number
+        description: The recipe number of likes
+        example: 10
+      vegan:
+        type: boolean
+        description: The recipe is vegan
+        example: true
+      vegetarian:
+        type: boolean
+        description: The recipe is vegetarian
+        example: true
+      glutenFree:
+        type: boolean
+        description: The recipe is gluten free
+        example: true
+      watched:
+        type: boolean
+        description: The recipe watched status
+        example: "recipe watched status"
+      favorite:
+        type: boolean
+        description: The recipe favorite status
+        example: "recipe favorite status"
+      ingredients:
+        type: array
+        description: The recipe ingredients and quantities
+        items:
+          type: string
+          description: The recipe ingredient and quantity
+          example: "eggs 3"
+      instructions:
+        type: string
+        description: The recipe instructions
+        example: "Step 1: do this, Step 2: do that"
+      cuisine:
+        type: array
+        description: The recipe cuisine
+        items:
+          type: string
+          description: The recipe cuisine
+          example: "Italian"
+      diet:
+        type: array
+        description: The recipe diet
+        items:
+          type: string
+          description: The recipe diet
+          example: "Vegetarian"
+      intolerances:
+        type: array
+        description: The recipe intolerances
+        items:
+          type: string
+          description: The recipe intolerances
+          example: "Gluten"
+  previewRecipe:
+    type: object
+    description: Model containing recipe information
+    properties:
+      name:
+        type: string
+        description: The recipe name
+        example: "Recipe name"
+      imageURL:
+        type: string
+        description: The url for recipe image
+        format: url
+        example: "https://www.acouplecooks.com/wp-content/uploads/2021/03/Cheese-Tortellini-011.jpg"
+      preparationTimeInMinutes:
+        type: number
+        description: The recipe preparation time in minutes
+        example: 60
+      numOfLikes:
+        type: number
+        description: The recipe number of likes
+        example: 10
+      vegan:
+        type: boolean
+        description: The recipe is vegan
+        example: true
+      vegetarian:
+        type: boolean
+        description: The recipe is vegetarian
+        example: true
+      glutenFree:
+        type: boolean
+        description: The recipe is gluten free
+        example: true
+      watched:
+        type: boolean
+        description: The recipe watched status
+        example: "recipe watched status"
+      favorite:
+        type: boolean
+        description: The recipe favorite status
+        example: "recipe favorite status"
+  FamilyRecipe:
+    type: object
+    description: Model containing family recipe information
+    properties:
+      name:
+        type: string
+        description: The recipe name
+        example: "Recipe name"
+      imageURL:
+        type: string
+        description: The url for recipe image
+        format: url
+        example: "https://www.acouplecooks.com/wp-content/uploads/2021/03/Cheese-Tortellini-011.jpg"
+      preparationTimeInMinutes:
+        type: number
+        description: The recipe preparation time in minutes
+        example: 60
+      vegan:
+        type: boolean
+        description: The recipe is vegan
+        example: true
+      vegetarian:
+        type: boolean
+        description: The recipe is vegetarian
+        example: true
+      glutenFree:
+        type: boolean
+        description: The recipe is gluten free
+        example: true
+      ingredients:
+        type: array
+        description: The recipe ingredients and quantities
+        items:
+          type: string
+          description: The recipe ingredient and quantity
+          example: "eggs 3"
+      instructions:
+        type: string
+        description: The recipe instructions
+        example: "Step 1: do this, Step 2: do that"
+      author:
+        type: string
+        description: The recipe made by
+        example: "Samira"
+      occasion:
+        type: string
+        description: The recipe occasion
+        example: "Shabbat"
