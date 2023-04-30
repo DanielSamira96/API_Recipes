@@ -233,6 +233,31 @@ paths:
                   $ref: "#/components/schemas/PreviewRecipe"
         "404":
           description: No recipes found
+    delete:
+      tags:
+        - user
+      summary: Delete a recipe from favorites
+      description: Delete a recipe from favorites.
+      operationId: deleteFavoriteRecipe
+      requestBody:
+        description: Recipe object that needs to be deleted from the user favorites
+        content:
+          application/json:
+            schema:
+              type: integer
+              format: int64
+              example: 1
+      responses:
+        "200":
+          description: Recipe deleted from favorites
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Recipe"
+        "400":
+          description: Invalid recipe supplied
+        "404":
+          description: Recipe not found in favorites
   /user/watched:
     post:
       tags:
