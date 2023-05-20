@@ -11,8 +11,10 @@ tags:
     description: Everything about recipes
   - name: user
     description: Everything about users
+  - name: auth
+    description: Everything about authentication
 paths:
-  /recipe/{recipeId}:
+  /recipe/{recipe_id}:
     get:
       tags:
         - recipe
@@ -20,7 +22,7 @@ paths:
       description: Get an object containing the recipe with the specified ID.
       operationId: getRecipeById
       parameters:
-        - name: recipeId
+        - name: recipe_id
           in: path
           description: ID of recipe to return
           required: true
@@ -55,8 +57,6 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/PreviewRecipe"
-        "404":
-          description: No recipes found
   /recipe/search:
     get:
       tags:
@@ -104,6 +104,13 @@ paths:
           schema:
             type: string
             example: "gluten"
+        - name: sortBy
+          in: query
+          description: Sort recipes by popularity or time
+          required: false
+          schema:
+            type: string
+            example: "popularity"
       responses:
         "200":
           description: Array of objects containing preview recipes with the specified name
@@ -131,12 +138,10 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/FamilyRecipe"
-        "404":
-          description: No recipes found
-  /user:
+  /Register:
     post:
       tags:
-        - user
+        - auth
       summary: Create a new user
       description: Create a new user.
       operationId: createUser
@@ -147,43 +152,32 @@ paths:
             schema:
               $ref: "#/components/schemas/User"
       responses:
-        "200":
+        "201":
           description: User created
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/User"
-        "400":
-          description: Invalid user supplied
         "409":
           description: User already exists
-  /user/login:
+  /Login:
     post:
       tags:
-        - user
+        - auth
       summary: Logs user into the system
       description: Logs user into the system.
       operationId: loginUser
       requestBody:
         description: The user name and password for login in the system
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Login"
       responses:
         "200":
           description: successful operation
-          content:
-            application/json:
-              schema:
-                type: string
-                example: "token"
-        "400":
+        "401":
           description: Invalid username/password supplied
-  /user/logout:
+  /Logout:
     post:
       tags:
-        - user
+        - auth
       summary: Logs out current logged in user session
       description: Logs out current logged in user session.
       operationId: logoutUser
@@ -208,10 +202,6 @@ paths:
       responses:
         "200":
           description: Recipe added to favorites
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Recipe"
         "400":
           description: Invalid recipe supplied
         "409":
@@ -233,7 +223,7 @@ paths:
                   $ref: "#/components/schemas/PreviewRecipe"
         "404":
           description: No recipes found
-  /user/favorites/{recipeId}:
+  /user/favorites/{recipe_id}:
     delete:
       tags:
         - user
@@ -241,7 +231,7 @@ paths:
       description: Delete a recipe from favorites.
       operationId: deleteFavoriteRecipe
       parameters:
-        - name: recipeId
+        - name: recipe_id
           in: path
           description: ID of recipe to delete
           required: true
@@ -274,12 +264,10 @@ paths:
       responses:
         "200":
           description: Recipe added to user watched list
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Recipe"
         "400":
           description: Invalid recipe supplied
+        "409":
+          description: Recipe already exists in user watched list
     get:
       tags:
         - user
@@ -309,16 +297,10 @@ paths:
         content:
           application/json:
             schema:
-              type: integer
-              format: int64
-              example: 1
+              $ref: "#/components/schemas/Recipe"
       responses:
         "200":
           description: Recipe created
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Recipe"
         "400":
           description: Invalid recipe supplied
     get:
@@ -335,9 +317,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/PreviewRecipe"
-        "404":
-          description: No recipes found
+                  $ref: "#/components/schemas/Recipe"
 components:
   schemas:
     User:
@@ -424,6 +404,14 @@ components:
           type: boolean
           description: The recipe is gluten free
           example: true
+        ingredients:
+          type: string
+          description: The recipe ingredient and quantity
+          example: "eggs 3, apple 1, sugar 1 cup"
+        instructions:
+          type: string
+          description: The recipe instructions
+          example: "Step 1: do this, Step 2: do that"
         watched:
           type: boolean
           description: The recipe watched status
@@ -432,38 +420,10 @@ components:
           type: boolean
           description: The recipe favorite status
           example: "recipe favorite status"
-        ingredients:
-          type: array
-          description: The recipe ingredients and quantities
-          items:
-            type: string
-            description: The recipe ingredient and quantity
-            example: "eggs 3"
-        instructions:
-          type: string
-          description: The recipe instructions
-          example: "Step 1: do this, Step 2: do that"
-        cuisine:
-          type: array
-          description: The recipe cuisine
-          items:
-            type: string
-            description: The recipe cuisine
-            example: "Italian"
-        diet:
-          type: array
-          description: The recipe diet
-          items:
-            type: string
-            description: The recipe diet
-            example: "Vegetarian"
-        intolerances:
-          type: array
-          description: The recipe intolerances
-          items:
-            type: string
-            description: The recipe intolerances
-            example: "Gluten"
+        servings:
+          type: number
+          description: The recipe number of servings
+          example: 4
     PreviewRecipe:
       type: object
       description: Model containing recipe information
@@ -522,25 +482,10 @@ components:
           type: number
           description: The recipe preparation time in minutes
           example: 60
-        vegan:
-          type: boolean
-          description: The recipe is vegan
-          example: true
-        vegetarian:
-          type: boolean
-          description: The recipe is vegetarian
-          example: true
-        glutenFree:
-          type: boolean
-          description: The recipe is gluten free
-          example: true
         ingredients:
-          type: array
-          description: The recipe ingredients and quantities
-          items:
-            type: string
-            description: The recipe ingredient and quantity
-            example: "eggs 3"
+          type: string
+          description: The recipe ingredient and quantity
+          example: "eggs 3, apple 1, sugar 1 cup"
         instructions:
           type: string
           description: The recipe instructions
